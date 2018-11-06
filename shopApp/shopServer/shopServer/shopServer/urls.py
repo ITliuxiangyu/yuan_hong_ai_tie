@@ -24,6 +24,8 @@ urlpatterns = [
 
     # 我是来测试的 真的
 
+    # 但是我不要注释了
+
 
     url(r'^$' , login),
     url(r'^.' , error),
