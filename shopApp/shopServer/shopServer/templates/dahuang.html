@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>大黄</title>
+</head>
+<body>
+    我是大黄界面
+    
+    <button id = 'startBtn'>获取config包</button>
+
+    <a href="http://www.baidu.com">我是百度</a>
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+	var appid = "wx0a2573d916488428"
+	var secret = "e6cde038b82cc5f936f5741d3e634be3"
+	var dongtaiUrl = window.location.href
+	dongtaiUrl = dongtaiUrl.split("#")[0]
+	
+	var ticket = "HoagFKDcsGMVCIY2vOjf9n2pqcaR3qH811pLF5rKGl-WMrNo_eyDqazUqvfDscQ9J7Vb0sGlst2P1iYoVzWp6A"
+	var access_token = "6_1OMgDzkDdlq-0B3Ry8ezpkLh7btT9yG8HJZyKlY2TdfqgFojlrp66OOqYpfFvZLm973jHO3ZANmNQ-fgsdu5j55WjIrP_ugvGX3RIoOz6nOj_v-U5xtcGWmLhRDJYjyIsgFv4lqH-yT2vB35HDMdAFAWSB"
+	document.getElementById("startBtn").onclick = function(){
+		
+	}
+	function myPost (url , data , fn) {
+		var sendStr = ""
+		for (key in data){
+			sendStr = sendStr + key + "=" + data[key] +"&"
+//			console.log(key)
+//			console.log(data[key])
+//			console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+		}
+		sendStr = sendStr.substring(0 , sendStr.length - 1)
+		
+		
+		
+//		console.log("**********************")
+//		console.log(sendStr)
+        var xmlhttp;
+        if (window.XMLHttpRequest){
+            // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp=new XMLHttpRequest();
+        } else {
+            // IE6, IE5 浏览器执行代码
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                fn(xmlhttp.responseText)
+            }
+        }
+        xmlhttp.open("POST",url,true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        console.log(sendStr)
+        xmlhttp.send(sendStr);
+    }
+
+	
+	//从服务器获取configPackage 包
+	
+	
+	//获取 access_token url
+//	var access_token = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET'
+//	//通过 access_token 来获取 jsapi_ticket
+//	var jsapi_ticket = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi'
+	myPost("http://www.dangsh.top/getJSSDKConfigPackage/" , 
+		{"appid":appid , 
+		"secret":secret  , 
+		"access_token":access_token ,
+		"ticket": ticket
+		} ,
+		function(data){
+			console.log("****************")
+			console.log(data)
+			data = JSON.parse(data)
+			wx.config({
+		    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+		    appId: appid, // 必填，公众号的唯一标识
+		    timestamp: data.timestamp, // 必填，生成签名的时间戳
+		    nonceStr: data.noncestr, // 必填，生成签名的随机串
+		    signature: data.sign,// 必填，签名，见附录1
+		    "dongtaiUrl":dongtaiUrl
+		    jsApiList: [
+		    'onMenuShareTimeline'
+		    ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+		});
+		
+		//微信分享到朋友圈
+		wx.onMenuShareTimeline({
+		    title: '哀民生之多艰，余虽好修姱以鞿羁兮', // 分享标题
+		    link: 'http://www.dangsh.top', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+		    imgUrl: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1516961920723&di=577c97dacc12ebaba7f954bd94da8667&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fzhidao%2Fpic%2Fitem%2Fb90e7bec54e736d13d13d3e29e504fc2d46269d3.jpg', // 分享图标
+		    success: function () {// 用户确认分享后执行的回调函数
+		    	alert("分享配置成功！！！")
+		    	alert(data)
+		    	alert(JSON.stringify(data))
+		},
+		cancel: function () {
+		    // 用户取消分享后执行的回调函数
+		    alert("取消分享！！！")
+		    alert(err)
+		    alert(JSON.stringify(err))
+		    }
+		});
+		})
+	
+</script>
+</html>

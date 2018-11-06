@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>刘翔宇</title>
+</head>
+<body>
+    我是刘翔宇界面 jkjaklsdjfkljklasjdklfjklasjdfk
+
+
+    <button id="startBtn">获取config包</button>
+
+</body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+
+<script>
+
+    var appid = "wx7d5cce341b143169"
+    var secret = "b925b096d13426048cab67c64b30a9af"
+
+
+    var access_token = "6_oqMO_6XyOmH8UKGMWT0GsrXphZyuKERtrXYeBqwYNBruhbRQzJGHPSbBtROeYmWD6-Lti0jc8XHpWoFFWVe_-2FgF6JUpBTu3MuWyFkfJPwoFXF_q_sOZ2Bxk4FyBeYasVKRcGqOEiafj37eFXUiAJAKCZ"
+
+
+    var ticket = "kgt8ON7yVITDhtdwci0qecyF3utgU9f9cFLnmJQkBqXFmrIq8dCUPrmlVma9gh5r5PMIpWOLgv1qYL3lGD1F_Q"
+
+
+    document.getElementById("startBtn").onclick = function () {
+        
+    }
+
+    function myPost (url , data , fn) {
+
+        var sendStr = ""
+
+        for (key in data) {
+            sendStr = sendStr + key + "=" + data[key] + "&"
+        }
+
+        sendStr = sendStr.substring(0 , sendStr.length - 1)
+
+        
+        var xmlhttp;
+        if (window.XMLHttpRequest){
+            // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            xmlhttp=new XMLHttpRequest();
+        } else {
+            // IE6, IE5 浏览器执行代码
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                fn(xmlhttp.responseText)
+            }
+        }
+        xmlhttp.open("POST",url,true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send(sendStr);
+    }
+
+
+
+    // var dongtaiUrl = window.location.href
+    // dongtaiUrl = dongtaiUrl.split("#")[0]
+    // dongtaiUrl = encodeURIComponent(dongtaiUrl)
+    
+    alert(location.href.split('#')[0])
+    var dongtaiUrl = location.href.split('#')[0]
+
+
+    var dongtaiUrl = encodeURIComponent(location.href.split("#")[0]);
+
+    dongtaiUrl = "http://www.dangsh.top/liuxiangyu"
+
+    dongtaiUrl = encodeURIComponent(dongtaiUrl)
+
+    alert(dongtaiUrl)
+
+   
+    myPost("http://www.dangsh.top/getJSSDKConfigPackage/?fullUrl=" + dongtaiUrl , 
+    {
+        "appid":appid ,
+        "secret":secret , 
+        "access_token": access_token , 
+        "ticket":ticket , 
+        "dongtaiUrl":dongtaiUrl
+    } , 
+    function (data) {
+        data = JSON.parse(data)
+
+        wx.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: appid, // 必填，公众号的唯一标识
+            timestamp: data.timestamp , // 必填，生成签名的时间戳
+            nonceStr: data.noncestr, // 必填，生成签名的随机串
+            signature: data.sign,// 必填，签名，见附录1
+            jsApiList: [
+                'onMenuShareTimeline'
+            ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        });
+
+        wx.ready(function () {
+            // 微信分享朋友圈
+            wx.onMenuShareTimeline({
+                title: '我的第一次', // 分享标题
+                link: 'http://www.dangsh.top', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: 'http://img5.duitang.com/uploads/item/201203/08/20120308150256_eiPUJ.jpeg', // 分享图标
+                success: function (data) {
+                    alet("分享配置成功")
+                    alert(data)
+                    alert(JSON.stringify(data))
+                },
+                cancel: function (err) {
+                    // 用户取消分享后执行的回调函数
+                    alert("用户取消的分享")
+                    alert(err)
+                    alert(JSON.stringify(err))
+                }
+            });
+        })
+
+
+        wx.error(function (err) {
+            alert("出错")
+            alert(err)
+            alert(JSON.stringify(err))
+        })
+
+        
+
+    })
+
+
+    
+
+
+
+    
+
+</script>
+</html>

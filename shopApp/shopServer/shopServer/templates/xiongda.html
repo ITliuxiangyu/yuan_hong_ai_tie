@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+</head>
+<body>
+	我是熊大测试界面
+
+	<button class="xiangce">获取相册</button>
+
+
+	<button class="kaishiluyin">开始录音</button>
+	<button class="tingzhiluyin">停止录音</button>
+	<button class="bofangluyin">播放录音</button>
+	<button class="tinghzibofang">停止播放</button>
+
+
+	<button class="yuyinshibie">语音识别</button>
+
+
+	<button class="saoyisao">扫一扫</button>
+
+	
+
+</body>
+
+
+<script src="http://www.dangsh.top/static/js/jquery.js"></script>
+
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+<script>
+
+	var luyinid = ''
+
+	var dangqian_url = location.href.split('#')[0]
+
+	var qianming = ""
+	var xmlhttp;
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			console.log('拿到结果了.....')
+			var jieguo = xmlhttp.responseText
+			jieguo = JSON.parse(jieguo)
+
+			wx.config({
+				debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+				appId: 'wx619c085e365678c4', // 必填，公众号的唯一标识
+				timestamp: jieguo.timestamp, // 必填，生成签名的时间戳
+				nonceStr: jieguo.nonceStr, // 必填，生成签名的随机串
+				signature: jieguo.signature,// 必填，签名
+				jsApiList: ['chooseImage' , 'scanQRCode' , 'startRecord' , 'stopRecord' , 'playVoice' , 'pauseVoice' , 'translateVoice'] // 必填，需要使用的JS接口列表
+			});
+
+
+			wx.ready(function(){
+				// config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+				document.getElementsByClassName('xiangce')[0].onclick = function () {
+					console.log("ppppp")
+
+					wx.chooseImage({
+						count: 9, // 默认9
+						sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+						sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+						success: function (res) {
+							var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+						}
+					});
+					
+				}
+
+				// 开始录音的按钮点击事件
+				document.getElementsByClassName('kaishiluyin')[0].onclick = function () {
+					wx.startRecord();
+				}
+
+				// 停止录音的按钮点击事件
+				document.getElementsByClassName('tingzhiluyin')[0].onclick = function () {
+					wx.stopRecord({
+						success: function (res) {
+							luyinid = res.localId;
+						}
+					});
+				}
+
+				// 开始播放的按钮点击事件
+				document.getElementsByClassName('bofangluyin')[0].onclick = function () {
+					wx.playVoice({
+						localId: luyinid // 需要播放的音频的本地ID，由stopRecord接口获得
+					});
+				}
+
+				// 停止播放的按钮点击事件
+				document.getElementsByClassName('tinghzibofang')[0].onclick = function () {
+					wx.pauseVoice({
+						localId: luyinid // 需要暂停的音频的本地ID，由stopRecord接口获得
+					});
+				}
+
+				// 语音识别按钮点击事件
+				document.getElementsByClassName('yuyinshibie')[0].onclick = function () {
+					wx.translateVoice({
+						localId: luyinid, // 需要识别的音频的本地Id，由录音相关接口获得
+						isShowProgressTips: 1, // 默认为1，显示进度提示
+						success: function (res) {
+							alert(res.translateResult); // 语音识别的结果
+						}
+					});
+				}
+
+
+				// 语音识别按钮点击事件
+				document.getElementsByClassName('saoyisao')[0].onclick = function () {
+					wx.scanQRCode({
+						needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+						scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+						success: function (res) {
+							var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+							alert('搜啊一扫结果')
+							alert(result)
+						}
+					});
+				}
+
+
+				
+
+			});
+
+
+			wx.error(function(res){
+				// config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+				alert('微信配置失败')
+			});
+
+		}
+	}
+	xmlhttp.open("POST","http://www.dangsh.top/wxjsqianmingFn/",true);
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.send("url=" + dangqian_url);
+
+
+	
+</script>
+
+</html>
