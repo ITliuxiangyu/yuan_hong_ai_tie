@@ -22,7 +22,9 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 
+    # 我是来测试的 真的
 
-   url(r'^$' , login),
-   url(r'^.' , error),
+
+    url(r'^$' , login),
+    url(r'^.' , error),
    ]
