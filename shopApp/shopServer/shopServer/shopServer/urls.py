@@ -16,17 +16,17 @@ Including another URLconf
 from django.conf.urls import url , include
 from django.contrib import admin
 from shopApp.views import *
+  
 
 
 urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
 
-    # 我是来测试的 真的
-
-    # 但是我不要注释了
-
-
     url(r'^$' , login),
+
+    
+    url(r'^home/', include('home.urls')),
+
     url(r'^.' , error),
    ]

@@ -7,43 +7,43 @@ from django.shortcuts import redirect
 
 import re
 from django.http import HttpResponse
-from qrcode.main import QRCode
-import os
-import random
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageFilter
-from PIL import ImageFont
-import json, urllib
-from urllib.parse import urlencode
+# from qrcode.main import QRCode
+# import os
+# import random
+# from PIL import Image
+# from PIL import ImageDraw
+# from PIL import ImageFilter
+# from PIL import ImageFont
+# import json, urllib
+# from urllib.parse import urlencode
 
 
 
-from urllib import parse,request
+# from urllib import parse,request
 
-import requests
+# import requests
 
-import datetime 
-import time
-from django import forms
-from django.shortcuts import render_to_response
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from shopApp.mytool import *
-from django.db import connection
-from aip import  AipSpeech
-import json
-import base64
-import subprocess
+# import datetime 
+# import time
+# from django import forms
+# from django.shortcuts import render_to_response
+# from django.core.files.uploadedfile import InMemoryUploadedFile
+# from shopApp.mytool import *
+# from django.db import connection
+# from aip import  AipSpeech
+# import json
+# import base64
+# import subprocess
 
-import string
+# import string
 
-import hashlib
+# import hashlib
 
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 
-from django.core.cache import cache
-from xmljson import badgerfish as bf
-from xml.etree.ElementTree import fromstring
+# from django.core.cache import cache
+# from xmljson import badgerfish as bf
+# from xml.etree.ElementTree import fromstring
 
 
 # 登录界面
